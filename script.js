@@ -10,13 +10,17 @@ function Book(title, author, pages, readBool, isDisplayed) {
     this.isDisplayed = isDisplayed;
 }
 
+Book.prototype.toggleReadStatus = function() {
+    this.readBool = !this.readBool;
+}
+
 function addBookToLibrary(title, author, pages, readBool, isDisplayed) {
     const newBook = new Book(title, author, pages, readBool, isDisplayed);
     myLibrary.push(newBook);
 }
 
 function displayLibraryContents() {
-    myLibrary.forEach((book, index) => {
+    myLibrary.forEach((book) => {
         if(!book.isDisplayed) {
 
             let bookCard = document.createElement('div');
@@ -25,12 +29,14 @@ function displayLibraryContents() {
             let bookPages = document.createElement('p');
             let readBool = document.createElement('p');
             let removeBtn = document.createElement('button');
+            let toggleReadStatus = document.createElement('button');
 
             bookTitle.textContent = `"${book.title}"`;
             bookAuthor.textContent = book.author;
             bookPages.textContent = book.pages;
             readBool.textContent = book.readBool;
             removeBtn.textContent = 'remove book';
+            toggleReadStatus.textContent = 'toggle read status';
 
             bookCard.classList.add('book-card');
 
@@ -39,7 +45,8 @@ function displayLibraryContents() {
             bookCard.appendChild(bookPages);
             bookCard.appendChild(readBool);
             bookCard.appendChild(removeBtn);
-        
+            bookCard.appendChild(toggleReadStatus);
+
             document.querySelector('body').appendChild(bookCard);
 
             book.isDisplayed = true;
@@ -47,6 +54,11 @@ function displayLibraryContents() {
             removeBtn.addEventListener('click', () => {
                 document.querySelector('body').removeChild(bookCard);
             });
+
+            toggleReadStatus.addEventListener('click', () => {
+                book.toggleReadStatus();
+                readBool.textContent = book.readBool;
+            })
         }
     });
 }
