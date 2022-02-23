@@ -30,6 +30,10 @@ document.querySelector('.add-book-btn').addEventListener('click', () => {
     document.querySelector('.add-book-modal').style.display = 'block';
 });
 
+document.querySelector('.close-book-modal').addEventListener('click', () => {
+    document.querySelector('.add-book-modal').style.display = 'none';
+});
+
 document.querySelector('#submit').addEventListener('click', () => {
     
     addBookToLibrary(document.querySelector('#title').value, document.querySelector('#author').value, 
