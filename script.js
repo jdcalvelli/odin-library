@@ -16,7 +16,7 @@ function addBookToLibrary(title, author, pages, readBool, isDisplayed) {
 }
 
 function displayLibraryContents() {
-    myLibrary.forEach((book) => {
+    myLibrary.forEach((book, index) => {
         if(!book.isDisplayed) {
 
             let bookCard = document.createElement('div');
@@ -24,11 +24,13 @@ function displayLibraryContents() {
             let bookAuthor = document.createElement('p');
             let bookPages = document.createElement('p');
             let readBool = document.createElement('p');
+            let removeBtn = document.createElement('button');
 
             bookTitle.textContent = `"${book.title}"`;
             bookAuthor.textContent = book.author;
             bookPages.textContent = book.pages;
             readBool.textContent = book.readBool;
+            removeBtn.textContent = 'remove book';
 
             bookCard.classList.add('book-card');
 
@@ -36,10 +38,15 @@ function displayLibraryContents() {
             bookCard.appendChild(bookAuthor);
             bookCard.appendChild(bookPages);
             bookCard.appendChild(readBool);
+            bookCard.appendChild(removeBtn);
         
             document.querySelector('body').appendChild(bookCard);
 
             book.isDisplayed = true;
+
+            removeBtn.addEventListener('click', () => {
+                document.querySelector('body').removeChild(bookCard);
+            });
         }
     });
 }
