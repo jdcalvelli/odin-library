@@ -6,3 +6,12 @@
 
     background-color: cyan;
 }
+
+.book-card {
+    width: 200px;
+    height: 250px;
+
+    background-color: lightgrey;
+
+    margin-bottom: 16px;
+}

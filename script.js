@@ -10,17 +10,35 @@ function Book(title, author, pages, readBool, isDisplayed) {
     this.isDisplayed = isDisplayed;
 }
 
-function addBookToLibrary(title, author, pages, readBool) {
-    const newBook = new Book(title, author, pages, readBool);
+function addBookToLibrary(title, author, pages, readBool, isDisplayed) {
+    const newBook = new Book(title, author, pages, readBool, isDisplayed);
     myLibrary.push(newBook);
 }
 
 function displayLibraryContents() {
     myLibrary.forEach((book) => {
         if(!book.isDisplayed) {
-            let bookDOM = document.createElement('p');
-            bookDOM.innerHTML = `${book.title} <br> ${book.author} <br> ${book.pages} <br> ${book.readBool}`;
-            document.querySelector('body').appendChild(bookDOM);
+
+            let bookCard = document.createElement('div');
+            let bookTitle = document.createElement('p');
+            let bookAuthor = document.createElement('p');
+            let bookPages = document.createElement('p');
+            let readBool = document.createElement('p');
+
+            bookTitle.textContent = `"${book.title}"`;
+            bookAuthor.textContent = book.author;
+            bookPages.textContent = book.pages;
+            readBool.textContent = book.readBool;
+
+            bookCard.classList.add('book-card');
+
+            bookCard.appendChild(bookTitle);
+            bookCard.appendChild(bookAuthor);
+            bookCard.appendChild(bookPages);
+            bookCard.appendChild(readBool);
+        
+            document.querySelector('body').appendChild(bookCard);
+
             book.isDisplayed = true;
         }
     });
