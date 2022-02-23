@@ -1,0 +1,8 @@
+.add-book-modal {
+    display: block;
+
+    width: 250px;
+    height: 350px;
+
+    background-color: cyan;
+}
