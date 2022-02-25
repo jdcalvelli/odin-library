@@ -1,82 +1,98 @@
-//library array to hold books
-let myLibrary = [];
+//library class declaration
+class Library {
+    constructor() {
+        this.bookShelf = [];
+    }
 
-//constructor function for books
-function Book(title, author, pages, readBool, isDisplayed) {
-    this.title = title;
-    this.author = author;
-    this.pages = pages;
-    this.readBool = readBool;
-    this.isDisplayed = isDisplayed;
+    addBook(Book) {
+        this.bookShelf.push(Book);
+    }
+
+    displayLibraryContents() {
+        this.bookShelf.forEach((Book) => {
+            if(!Book.isDisplayed) {
+    
+                let bookCard = document.createElement('div');
+                let bookTitle = document.createElement('p');
+                let bookAuthor = document.createElement('p');
+                let bookPages = document.createElement('p');
+                let bookIsRead = document.createElement('p');
+                let removeBtn = document.createElement('button');
+                let toggleReadStatus = document.createElement('button');
+    
+                bookTitle.textContent = `"${Book.title}"`;
+                bookAuthor.textContent = Book.author;
+                bookPages.textContent = `pages: ${Book.pages}`;
+                bookIsRead.textContent = `isRead?: ${Book.isRead}`;
+                removeBtn.textContent = 'remove book';
+                toggleReadStatus.textContent = 'toggle read status';
+    
+                bookCard.classList.add('book-card');
+    
+                bookCard.appendChild(bookTitle);
+                bookCard.appendChild(bookAuthor);
+                bookCard.appendChild(bookPages);
+                bookCard.appendChild(bookIsRead);
+                bookCard.appendChild(removeBtn);
+                bookCard.appendChild(toggleReadStatus);
+    
+                document.querySelector('body').appendChild(bookCard);
+    
+                Book.isDisplayed = true;
+    
+                removeBtn.addEventListener('click', () => {
+                    document.querySelector('body').removeChild(bookCard);
+                });
+    
+                toggleReadStatus.addEventListener('click', () => {
+                    Book.toggleIsRead();
+                    bookIsRead.textContent = `isRead?: ${Book.isRead}`;
+                })
+            }
+        });
+    }
 }
 
-Book.prototype.toggleReadStatus = function() {
-    this.readBool = !this.readBool;
+//book class declaration
+class Book {
+    constructor(title, author, pages, isRead, isDisplayed) {
+        this.title = title;
+        this.author = author;
+        this.pages = pages;
+        this.isRead = isRead;
+        this.isDisplayed = isDisplayed;
+    }
+
+    toggleIsRead() {
+        this.isRead = !this.isRead;
+    }
 }
 
-function addBookToLibrary(title, author, pages, readBool, isDisplayed) {
-    const newBook = new Book(title, author, pages, readBool, isDisplayed);
-    myLibrary.push(newBook);
-}
+//using eventManager as IIFE to not pollute global space!
+const eventsManager = (() => {
+    //initialize library
+    const myLibrary = new Library();
 
-function displayLibraryContents() {
-    myLibrary.forEach((book) => {
-        if(!book.isDisplayed) {
-
-            let bookCard = document.createElement('div');
-            let bookTitle = document.createElement('p');
-            let bookAuthor = document.createElement('p');
-            let bookPages = document.createElement('p');
-            let readBool = document.createElement('p');
-            let removeBtn = document.createElement('button');
-            let toggleReadStatus = document.createElement('button');
-
-            bookTitle.textContent = `"${book.title}"`;
-            bookAuthor.textContent = book.author;
-            bookPages.textContent = book.pages;
-            readBool.textContent = book.readBool;
-            removeBtn.textContent = 'remove book';
-            toggleReadStatus.textContent = 'toggle read status';
-
-            bookCard.classList.add('book-card');
-
-            bookCard.appendChild(bookTitle);
-            bookCard.appendChild(bookAuthor);
-            bookCard.appendChild(bookPages);
-            bookCard.appendChild(readBool);
-            bookCard.appendChild(removeBtn);
-            bookCard.appendChild(toggleReadStatus);
-
-            document.querySelector('body').appendChild(bookCard);
-
-            book.isDisplayed = true;
-
-            removeBtn.addEventListener('click', () => {
-                document.querySelector('body').removeChild(bookCard);
-            });
-
-            toggleReadStatus.addEventListener('click', () => {
-                book.toggleReadStatus();
-                readBool.textContent = book.readBool;
-            })
-        }
+    //book modal controls
+    document.querySelector('.add-book-btn').addEventListener('click', () => {
+        document.querySelector('.add-book-modal').style.display = 'block';
     });
-}
-
-document.querySelector('.add-book-btn').addEventListener('click', () => {
-    document.querySelector('.add-book-modal').style.display = 'block';
-});
-
-document.querySelector('.close-book-modal').addEventListener('click', () => {
-    document.querySelector('.add-book-modal').style.display = 'none';
-});
-
-document.querySelector('#submit').addEventListener('click', () => {
     
-    addBookToLibrary(document.querySelector('#title').value, document.querySelector('#author').value, 
-        document.querySelector('#pages').value, document.querySelector('#read').checked, false);
-    
-    displayLibraryContents();
+    document.querySelector('.close-book-modal').addEventListener('click', () => {
+        document.querySelector('.add-book-modal').style.display = 'none';
+    });
 
-    document.querySelector('form').reset();
-});
+    //submission of new book controls
+    document.querySelector('#submit').addEventListener('click', () => {
+    
+        let bookToAdd = new Book(
+            document.querySelector('#title').value, document.querySelector('#author').value, 
+            document.querySelector('#pages').value, document.querySelector('#read').checked, false
+            );
+    
+        myLibrary.addBook(bookToAdd);
+        myLibrary.displayLibraryContents();
+    
+        document.querySelector('form').reset();
+    });
+})()
